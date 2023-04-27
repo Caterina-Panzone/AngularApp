@@ -1,0 +1,13 @@
+<button
+  type="button"
+  class="btn btn-light position-relative"
+  [routerLink]="['basket']"
+>
+  <i class="bi bi-cart"></i>
+  <span
+    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+  >
+    {{ badge }}
+    <span class="visually-hidden">{{ badge }} items on cart</span>
+  </span>
+</button>

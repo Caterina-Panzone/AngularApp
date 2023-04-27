@@ -1,0 +1,42 @@
+<div class="container mt-4" *ngIf="basket && basket.items">
+  <h2>Carrito de la Compra</h2>
+  <div class="row mt-3" *ngFor="let item of basket.items">
+    <div class="card rv-px" style="max-width: 700px">
+      <div class="row g-0">
+        <div class="col-md-4 col-lg-3">
+          <img src="{{ item.pictureUrl }}" class="img-fluid rounded-start" />
+        </div>
+        <div class="col-md-8 col-lg-9">
+          <div class="card-body">
+            <div class="row">
+              <h5 class="card-title col-md-9">{{ item.productName }}</h5>
+              <div class="col-md-3 text-end">
+                <b>{{ item.unitPrice * item.quantity | currency }}</b>
+              </div>
+            </div>
+            <p class="card-text">
+              <small class="text-body-secondary"
+                >{{ item.unitPrice | currency }}/ ud</small
+              >
+            </p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button class="btn btn-light" type="button">
+                <i class="bi bi-dash"></i>
+              </button>
+              <div class="btn disabled">{{ item.quantity }}</div>
+              <button class="btn btn-light" type="button">
+                <i class="bi bi-plus"></i>
+              </button>
+              <button class="btn btn-primary" type="button">
+                <i class="bi bi-heart"></i>
+              </button>
+              <button class="btn btn-danger" type="button">
+                <i class="bi bi-trash3"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

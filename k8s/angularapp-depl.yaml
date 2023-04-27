@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: angularapp-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: angularapp
+  template:
+    metadata:
+      labels:
+        app: angularapp
+    spec:
+      containers:
+        - name: angularapp
+          image: caterinapanzone/angularapp:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: angularapp-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: angularapp
+  ports:
+  - name: angularapp
+    port: 80
+    targetPort: 80
+    protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: angularapp-nodeport-srv
+spec: 
+  type: NodePort
+  selector:
+    app: angularapp
+  ports:
+    - name: angularapp
+      protocol: TCP
+      port: 80
+      targetPort: 80
