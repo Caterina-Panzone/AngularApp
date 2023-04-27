@@ -35,11 +35,11 @@ export class CatalogService {
     //   })
     // );
     mockCatalog.pageIndex = pageIndex;
-    return of(mockCatalog);
+    return of(mockCatalog); //to-do: call endpoint
   }
 
   getCategories(): Observable<ICatalogCategory[]> {
-    return of(mockCategories);
+    return of(mockCategories); //to-do: call endpoint
   }
 }
 

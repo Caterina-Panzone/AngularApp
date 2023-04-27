@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" [routerLink]="['/']">Rewards</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -15,40 +15,31 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" (click)="login()">Login</a>
-        </li>
-        <li class="nav-item dropdown">
           <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
+            class="nav-link active"
+            aria-current="page"
+            [routerLink]="['catalog']"
+            >Catálogo</a
           >
-            Dropdown
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link disabled">Disabled</a>
+        <li class="nav-item" *ngIf="isAuthorized" [routerLink]="['catalog']">
+          <!-- to-do: change the routerLink to orders -->
+          <a class="nav-link active" aria-current="page">Órdenes</a>
+        </li>
+        <li class="nav-item" *ngIf="!isAuthorized">
+          <a class="nav-link active" aria-current="page" (click)="login()"
+            >Identificarse</a
+          >
         </li>
       </ul>
       <form class="d-flex" role="search">
         <input
           class="form-control me-2"
           type="search"
-          placeholder="Search"
-          aria-label="Search"
+          placeholder="Buscar"
+          aria-label="Buscar"
         />
-        <button class="btn btn-outline-success" type="submit">Search</button>
+        <button class="btn btn-outline-success" type="submit">Buscar</button>
       </form>
       <div class="mx-4"><app-basket-status></app-basket-status></div>
     </div>

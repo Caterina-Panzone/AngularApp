@@ -35,7 +35,7 @@ export class CatalogComponent implements OnInit {
     this.getCatalog(12, 1);
     this.getCategories();
 
-    this.securityService.authenticationChallenge$.subscribe((res) => {
+    this.securityService.authenticationChanged$.subscribe((res) => {
       this.authenticated = res;
     });
   }

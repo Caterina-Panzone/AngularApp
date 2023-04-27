@@ -7,9 +7,15 @@ import { SecurityService } from '../../shared/services/security.service';
   styleUrls: ['./header.component.sass'],
 })
 export class HeaderComponent implements OnInit {
+  isAuthorized: boolean = false;
+
   constructor(private securityService: SecurityService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.securityService.authenticationChanged$.subscribe(
+      (res) => (this.isAuthorized = res)
+    );
+  }
 
   login(): void {
     this.securityService.Authorize();

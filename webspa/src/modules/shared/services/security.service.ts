@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
 export class SecurityService {
   public IsAuthorized: boolean = false;
   private authenticationSource = new Subject<boolean>();
-  authenticationChallenge$ = this.authenticationSource.asObservable();
+  authenticationChanged$ = this.authenticationSource.asObservable();
 
   constructor() {}
 
