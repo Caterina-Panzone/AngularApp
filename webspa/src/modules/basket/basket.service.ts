@@ -37,23 +37,20 @@ export class BasketService {
   private basketUpdateSource = new Subject<void>();
   basketUpdate$ = this.basketUpdateSource.asObservable();
 
-  constructor(
-    private authService: SecurityService,
-    private basketWrapperService: BasketWrapperService
-  ) {
+  constructor(private basketWrapperService: BasketWrapperService) {
     this.basketWrapperService.addItemToBasket$.subscribe((item) => {
       this.addItemToBasket(item);
     });
   }
 
-  private setBasket(basket: IBasket): Observable<boolean> {
+  setBasket(basket: IBasket): Observable<boolean> {
     this.basket = basket;
     this.basketUpdateSource.next();
-    return of(true);
+    return of(true); //to-do: call endpoint
   }
 
   getBasket(): Observable<IBasket> {
-    return of(this.basket);
+    return of(this.basket); //to-do: call endpoint
   }
 
   addItemToBasket(item: IBasketItem): Observable<boolean> {

@@ -12,16 +12,22 @@ export class BasketStatusComponent implements OnInit {
   constructor(private basketService: BasketService) {}
 
   ngOnInit(): void {
+    this.loadBasket();
+
     this.basketService.basketUpdate$.subscribe((res) => {
-      this.basketService.getBasket().subscribe((basket) => {
-        if (basket && basket.items) {
-          this.badge = basket.items
-            .map((x) => x.quantity)
-            .reduce((partialsum, q) => partialsum + q);
-        } else {
-          this.badge = 0;
-        }
-      });
+      this.loadBasket();
+    });
+  }
+
+  private loadBasket(): void {
+    this.basketService.getBasket().subscribe((basket) => {
+      if (basket && basket.items) {
+        this.badge = basket.items
+          .map((x) => x.quantity)
+          .reduce((partialsum, q) => partialsum + q);
+      } else {
+        this.badge = 0;
+      }
     });
   }
 }

@@ -3,6 +3,7 @@ import { IBasket } from '../shared/models/basket.model';
 import { BasketService } from './basket.service';
 import { Router } from '@angular/router';
 import { BasketWrapperService } from '../shared/services/basket.wrapper.service';
+import { IBasketItem } from '../shared/models/basketItem.model';
 
 @Component({
   selector: 'app-basket',
@@ -34,5 +35,17 @@ export class BasketComponent implements OnInit {
             .map((x) => x.unitPrice * x.quantity)
             .reduce((partialsum, item) => partialsum + item)
         : 0;
+  }
+
+  deleteItem(id: String) {
+    this.basket.items = this.basket.items.filter((item) => item.id !== id);
+    this.basketSerive.setBasket(this.basket);
+    this.calculateTotalPrice();
+  }
+
+  updateItemQuantity(item: IBasketItem, quantity: number) {
+    item.quantity = quantity > 0 ? quantity : 1;
+    this.basketSerive.setBasket(this.basket);
+    this.calculateTotalPrice();
   }
 }

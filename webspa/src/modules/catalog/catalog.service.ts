@@ -145,8 +145,7 @@ const mockCatalog: ICatalog = {
       name: 'Camiseta roja',
       description: 'Una camiseta roja de algodón',
       price: 19.99,
-      pictureUri:
-        'https://dummyimage.com/600x400/ff0000/ffffff&text=Camiseta+roja',
+      pictureUri: 'https://picsum.photos/200',
       catalogCategoryId: 6,
       catalogCategory: 'Ropa',
       units: 10,
@@ -156,8 +155,7 @@ const mockCatalog: ICatalog = {
       name: 'Pantalones vaqueros azules',
       description: 'Unos pantalones vaqueros azules de corte recto',
       price: 39.99,
-      pictureUri:
-        'https://dummyimage.com/600x400/0000ff/ffffff&text=Pantalones+vaqueros+azules',
+      pictureUri: 'https://picsum.photos/200',
       catalogCategoryId: 6,
       catalogCategory: 'Ropa',
       units: 5,
@@ -167,8 +165,7 @@ const mockCatalog: ICatalog = {
       name: 'Zapatos deportivos negros',
       description: 'Zapatos deportivos negros de alta calidad',
       price: 79.99,
-      pictureUri:
-        'https://dummyimage.com/600x400/000000/ffffff&text=Zapatos+deportivos+negros',
+      pictureUri: 'https://picsum.photos/200',
       catalogCategoryId: 6,
       catalogCategory: 'Ropa',
       units: 15,
@@ -178,8 +175,7 @@ const mockCatalog: ICatalog = {
       name: 'Chaqueta de cuero marrón',
       description: 'Una chaqueta de cuero marrón de estilo vintage',
       price: 149.99,
-      pictureUri:
-        'https://dummyimage.com/600x400/8B4513/ffffff&text=Chaqueta+de+cuero+marrón',
+      pictureUri: 'https://picsum.photos/200',
       catalogCategoryId: 6,
       catalogCategory: 'Ropa',
       units: 3,
@@ -189,8 +185,7 @@ const mockCatalog: ICatalog = {
       name: 'Sombrero de lana gris',
       description: 'Un sombrero de lana gris de estilo clásico',
       price: 29.99,
-      pictureUri:
-        'https://dummyimage.com/600x400/808080/ffffff&text=Sombrero+de+lana+gris',
+      pictureUri: 'https://picsum.photos/200',
       catalogCategoryId: 1,
       catalogCategory: 'Accesorios',
       units: 8,
@@ -200,8 +195,7 @@ const mockCatalog: ICatalog = {
       name: 'Vestido de flores',
       description: 'Un vestido de flores con diseño elegante',
       price: 89.99,
-      pictureUri:
-        'https://dummyimage.com/600x400/ff69b4/ffffff&text=Vestido+de+flores',
+      pictureUri: 'https://picsum.photos/200',
       catalogCategoryId: 6,
       catalogCategory: 'Ropa',
       units: 12,
@@ -211,8 +205,7 @@ const mockCatalog: ICatalog = {
       name: 'Bolso de cuero negro',
       description: 'Un bolso de cuero negro con diseño clásico',
       price: 69.99,
-      pictureUri:
-        'https://dummyimage.com/600x400/000000/ffffff&text=Bolso+de+cuero+negro',
+      pictureUri: 'https://picsum.photos/200',
       catalogCategoryId: 1,
       catalogCategory: 'Accesorios',
       units: 6,
