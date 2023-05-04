@@ -3,6 +3,7 @@
 ## Dependencies
 
 - angular dependencies
+- sass
 - bootstrap
 - popper.js
 - rxjs
@@ -21,29 +22,30 @@ Being at AppInterna.Rewards/webspa/:
 
 1. Install service deps
 
-    $ npm install
+    `npm install`
 
 2. Build the image:
 
-    $ docker build -t <DockerUserId>/<ImageName>:<version> .
+    `docker build -t <DockerUserId>/<ImageName>:<version> .`
 
   There's no need to use the docker user at this point, just tag (-t) the image as you'd like. When trying to have the application up and running through kubernetes, the above nomenclature is needed.
 
 3. Run recently created docker image:
 
-    $ docker run -p 4200:80 -d <DockerUserId>/<ImageName>
+    `docker run -p 4200:80 -d <DockerUserId>/<ImageName>`
 
     Same as above, make sure to  use the tag name in step 2.
 
 4. Stop a running container:
 
-    $ docker stop <ContainerId>
-  In order to retrieve the id, use the following command to list all the running containers:
-    $ docker ps
+    `docker stop <ContainerId>`
+    
+    In order to retrieve the id, use the following command to list all the running containers:
+    `docker ps`
 
 5. Access application:
 
-    - With a browser navigate to http://localhost:4200/
+    With a browser navigate to http://localhost:4200/
 
 ## Development
 
@@ -60,7 +62,7 @@ Recommended extensions:
 
 Otherwise, use any text/code editor of preference.
 
-## Prebuilt Angular Documentation
+## Pre-built Angular Documentation
 
 ### Development server
 
