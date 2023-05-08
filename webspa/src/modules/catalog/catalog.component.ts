@@ -32,7 +32,7 @@ export class CatalogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getCatalog(12, 1);
+    this.getCatalog(10, 1);
     this.getCategories();
 
     this.securityService.authenticationChanged$.subscribe((res) => {
@@ -42,12 +42,11 @@ export class CatalogComponent implements OnInit {
 
   private getCatalog(
     pageSize: number,
-    pageIndex: number,
-    category?: number
+    pageIndex: number
   ): void {
     this.errorReceived = false;
     this.service
-      .getCatalog(pageIndex, pageSize, category ?? 0)
+      .getCatalog(pageIndex, pageSize)
       .pipe(catchError((err) => this.handleError(err)))
       .subscribe((catalog) => {
         this.catalog = catalog;
@@ -64,7 +63,7 @@ export class CatalogComponent implements OnInit {
   private getCategories(): void {
     this.service.getCategories().subscribe((categories) => {
       this.categories = categories;
-      let allCategories: ICatalogCategory = { id: 0, category: 'Todas' };
+      let allCategories: ICatalogCategory = { id: 0, name: 'Todas', shortDesc: '', longDesc: '' };
       this.categories.unshift(allCategories);
     });
   }

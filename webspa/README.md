@@ -11,6 +11,7 @@
 - zone.js
 - karma/jasmine
 - nginx
+- circuit-breaker-js
 
 ## Environment
 

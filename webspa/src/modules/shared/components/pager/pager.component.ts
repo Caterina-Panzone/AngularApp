@@ -25,17 +25,19 @@ export class PagerComponent implements OnChanges {
   };
 
   ngOnChanges() {
-    console.log(this.model);
     if (this.model) {
       this.model.items =
         this.model.itemsPage > this.model.totalItems
           ? this.model.totalItems
-          : this.model.itemsPage;
+          : (
+            this.model.itemsPage*this.model.actualPage > this.model.totalItems ? 
+            this.model.itemsPage * this.model.actualPage - this.model.totalItems : 
+            this.model.itemsPage
+          );
 
       this.buttonStates.previousDisabled = this.model.actualPage == 1;
       this.buttonStates.nextDisabled =
         this.model.actualPage >= this.model.totalPages;
-      console.log(this.buttonStates);
     }
   }
 

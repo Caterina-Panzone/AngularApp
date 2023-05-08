@@ -1,55 +1,55 @@
 import { Injectable } from '@angular/core';
 import { ICatalog } from '../shared/models/catalog.model';
-import { Observable, of } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { ICatalogCategory } from '../shared/models/catalogCategory.model';
+import { HttpService } from '../shared/services/http.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CatalogService {
   private catalogUrl: string = '';
-  private categoriesUrl: string = '';
 
-  constructor() {
-    this.catalogUrl = '';
-    this.categoriesUrl = '';
+  constructor(private service: HttpService) {
+    this.catalogUrl = 'http://localhost:3000/catalog';
   }
 
   getCatalog(
     pageIndex: number,
-    pageSize: number,
-    category: number
+    pageSize: number
   ): Observable<ICatalog> {
-    let url = this.catalogUrl;
-
-    if (category) {
-      url = this.catalogUrl + '/category/' + category.toString();
+    const query = "query GetCatalog($limit: Int, $offset: Int) {catalog(limit: $limit, offset: $offset) {count products {id name shortDesc longDesc priceCurrency priceValue visible smallImageUrl largeImageUrl slob categories {id name}}}}";
+    let variables = {
+      limit: pageSize,
+      offset: (pageIndex-1) * pageSize
     }
-
-    url = url + '?pageIndex=' + pageIndex + '&pageSize=' + pageSize;
-
-    // to-do. Service should be in Shared folder.
-    // this.service.get(url).pipe<ICatalog>(
-    //   tap((response: any) => {
-    //     return response;
-    //   })
-    // );
-    mockCatalog.pageIndex = pageIndex;
-    return of(mockCatalog); //to-do: call endpoint
+    return this.service.post(this.catalogUrl, {'query': query, 'variables': variables }).pipe<ICatalog>(
+        map((response: any) => {
+          return {
+            pageIndex: pageIndex,
+            pageSize: pageSize,
+            count: response.data.catalog.count,
+            data: response.data.catalog.products
+          };
+        }));
   }
 
   getCategories(): Observable<ICatalogCategory[]> {
-    return of(mockCategories); //to-do: call endpoint
+    const query = "query { categories { id name shortDesc longDesc }}";
+    return this.service.post(this.catalogUrl, {'query': query}).pipe<ICatalogCategory[]>(
+      map((response: any) => {
+        return response.data.categories;
+      }));
   }
 }
 
 const mockCategories: ICatalogCategory[] = [
-  { id: 1, category: 'Accesorios' },
-  { id: 2, category: 'Electrónica' },
-  { id: 3, category: 'Libros' },
-  { id: 4, category: 'Juegos' },
-  { id: 5, category: 'Jardín' },
-  { id: 6, category: 'Ropa' },
+  { id: 1, name: 'Accesorios', shortDesc: '', longDesc: ''},
+  { id: 2, name: 'Electrónica', shortDesc: '', longDesc: ''},
+  { id: 3, name: 'Libros', shortDesc: '', longDesc: ''},
+  { id: 4, name: 'Juegos', shortDesc: '', longDesc: ''},
+  { id: 5, name: 'Jardín', shortDesc: '', longDesc: ''},
+  { id: 6, name: 'Ropa', shortDesc: '', longDesc: ''},
 ];
 
 const mockCatalog: ICatalog = {
@@ -60,155 +60,200 @@ const mockCatalog: ICatalog = {
     {
       id: 1,
       name: 'Conjuntos de Muebles de Jardín Exterior en Ratán 4 Piezas',
-      description:
+      shortDesc:
         'Juego de Muebles de Jardín para 4 Personas. Incluido 1 Sofá, 2 Sillones, 1 Mesa.',
-      price: 652.23,
-      pictureUri: 'https://picsum.photos/200',
-      catalogCategoryId: 5,
-      catalogCategory: 'Jardín',
-      units: 20,
+      longDesc: '',
+      priceValue: 652.23,
+      priceCurrency: 'USD',
+      smallImageUrl: 'https://picsum.photos/200',
+      largeImageUrl: 'https://picsum.photos/200',
+      categories: [{ id: 5, name: 'Jardín', shortDesc: '', longDesc: ''}],
+      slob: 'Jardín',
+      visible: true,
     },
     {
       id: 2,
       name: 'Reloj inteligente',
-      description: 'Reloj inteligente con pantalla táctil y GPS integrado',
-      price: 250,
-      pictureUri: 'https://picsum.photos/200',
-      catalogCategoryId: 2,
-      catalogCategory: 'Electrónica',
-      units: 20,
+      shortDesc: 'Reloj inteligente con pantalla táctil y GPS integrado',
+      longDesc: '',
+      priceValue: 250,
+      priceCurrency: 'USD',
+      smallImageUrl: 'https://picsum.photos/200',
+      largeImageUrl: 'https://picsum.photos/200',
+      categories: [{ id: 2, name: 'Electrónica', shortDesc: '', longDesc: ''}],
+      slob: 'Electrónica',
+      visible: true,
     },
     {
       id: 3,
       name: 'Libro de cocina',
-      description: 'Libro de cocina con recetas internacionales',
-      price: 30,
-      pictureUri: 'https://picsum.photos/200',
-      catalogCategoryId: 3,
-      catalogCategory: 'Libros',
-      units: 15,
+      shortDesc: 'Libro de cocina con recetas internacionales',
+      longDesc: '',
+      priceValue: 30,
+      priceCurrency: 'USD',
+      smallImageUrl: 'https://picsum.photos/200',
+      largeImageUrl: 'https://picsum.photos/200',
+      categories: [{ id: 3, name: 'Libros', shortDesc: '', longDesc: ''}],
+      slob: 'Libros',
+      visible: true,
     },
     {
       id: 4,
       name: 'Mochila para portátil',
-      description:
+      shortDesc:
         'Mochila con compartimento para portátil de hasta 15 pulgadas',
-      price: 50,
-      pictureUri: 'https://picsum.photos/200',
-      catalogCategoryId: 1,
-      catalogCategory: 'Accesorios',
-      units: 5,
+        longDesc: '',
+      priceValue: 50,
+      priceCurrency: 'USD',
+      smallImageUrl: 'https://picsum.photos/200',
+      largeImageUrl: 'https://picsum.photos/200',
+      categories: [{ id: 1, name: 'Accesorios', shortDesc: '', longDesc: ''}],
+      slob: 'Accesorios',
+      visible: true,
     },
     {
       id: 5,
       name: 'Gafas de sol',
-      description: 'Gafas de sol polarizadas con montura de metal',
-      price: 80,
-      pictureUri: 'https://picsum.photos/200',
-      catalogCategoryId: 1,
-      catalogCategory: 'Accesorios',
-      units: 12,
+      shortDesc: 'Gafas de sol polarizadas con montura de metal',
+      longDesc: '',
+      priceValue: 80,
+      priceCurrency: 'USD',
+      smallImageUrl: 'https://picsum.photos/200',
+      largeImageUrl: 'https://picsum.photos/200',
+      categories: [{ id: 1, name: 'Accesorios', shortDesc: '', longDesc: ''}],
+      slob: 'Accesorios',
+      visible: true,
     },
     {
       id: 6,
       name: 'Juego de mesa',
-      description: 'Juego de mesa para 4 jugadores con temática de estrategia',
-      price: 40,
-      pictureUri: 'https://picsum.photos/200',
-      catalogCategoryId: 4,
-      catalogCategory: 'Juegos',
-      units: 8,
+      shortDesc: 'Juego de mesa para 4 jugadores con temática de estrategia',
+      longDesc: '',
+      priceValue: 40,
+      priceCurrency: 'USD',
+      smallImageUrl: 'https://picsum.photos/200',
+      largeImageUrl: 'https://picsum.photos/200',
+      categories: [{ id: 4, name: 'Juegos', shortDesc: '', longDesc: ''}],
+      slob: 'Juegos',
+      visible: true,
     },
     {
       id: 7,
       name: 'Camiseta de algodón',
-      description: 'Camiseta cómoda y fresca para usar en cualquier ocasión',
-      price: 19.99,
-      pictureUri: 'https://picsum.photos/200',
-      catalogCategoryId: 6,
-      catalogCategory: 'Ropa',
-      units: 100,
+      shortDesc: 'Camiseta cómoda y fresca para usar en cualquier ocasión',
+      longDesc: '',
+      priceValue: 19.99,
+      priceCurrency: 'USD',
+      smallImageUrl: 'https://picsum.photos/200',
+      largeImageUrl: 'https://picsum.photos/200',
+      categories: [{ id: 6, name: 'Ropa', shortDesc: '', longDesc: ''}],
+      slob: 'Ropa',
+      visible: true,
     },
     {
       id: 8,
       name: 'Laptop HP',
-      description:
+      shortDesc:
         'Laptop con procesador Intel Core i7 y pantalla de 15 pulgadas',
-      price: 1200.0,
-      pictureUri: 'https://picsum.photos/200',
-      catalogCategoryId: 2,
-      catalogCategory: 'Electrónica',
-      units: 10,
+        longDesc: '',
+      priceValue: 1200.0,
+      priceCurrency: 'USD',
+      smallImageUrl: 'https://picsum.photos/200',
+      largeImageUrl: 'https://picsum.photos/200',
+      categories: [{ id: 2, name: 'Electrónica', shortDesc: '', longDesc: ''}],
+      slob: 'Electrónica',
+      visible: true,
     },
     {
       id: 9,
       name: 'Camiseta roja',
-      description: 'Una camiseta roja de algodón',
-      price: 19.99,
-      pictureUri: 'https://picsum.photos/200',
-      catalogCategoryId: 6,
-      catalogCategory: 'Ropa',
-      units: 10,
+      shortDesc: 'Una camiseta roja de algodón',
+      longDesc: '',
+      priceValue: 19.99,
+      priceCurrency: 'USD',
+      smallImageUrl: 'https://picsum.photos/200',
+      largeImageUrl: 'https://picsum.photos/200',
+      categories: [{ id: 6, name: 'Ropa', shortDesc: '', longDesc: ''}],
+      slob: 'Ropa',
+      visible: true,
     },
     {
       id: 10,
       name: 'Pantalones vaqueros azules',
-      description: 'Unos pantalones vaqueros azules de corte recto',
-      price: 39.99,
-      pictureUri: 'https://picsum.photos/200',
-      catalogCategoryId: 6,
-      catalogCategory: 'Ropa',
-      units: 5,
+      shortDesc: 'Unos pantalones vaqueros azules de corte recto',
+      longDesc: '',
+      priceValue: 39.99,
+      priceCurrency: 'USD',
+      smallImageUrl: 'https://picsum.photos/200',
+      largeImageUrl: 'https://picsum.photos/200',
+      categories: [{ id: 6, name: 'Ropa', shortDesc: '', longDesc: ''}],
+      slob: 'Ropa',
+      visible: true,
     },
     {
       id: 11,
       name: 'Zapatos deportivos negros',
-      description: 'Zapatos deportivos negros de alta calidad',
-      price: 79.99,
-      pictureUri: 'https://picsum.photos/200',
-      catalogCategoryId: 6,
-      catalogCategory: 'Ropa',
-      units: 15,
+      shortDesc: 'Zapatos deportivos negros de alta calidad',
+      longDesc: '',
+      priceValue: 79.99,
+      priceCurrency: 'USD',
+      smallImageUrl: 'https://picsum.photos/200',
+      largeImageUrl: 'https://picsum.photos/200',
+      categories: [{ id: 6, name: 'Ropa', shortDesc: '', longDesc: ''}],
+      slob: 'Ropa',
+      visible: true,
     },
     {
       id: 12,
       name: 'Chaqueta de cuero marrón',
-      description: 'Una chaqueta de cuero marrón de estilo vintage',
-      price: 149.99,
-      pictureUri: 'https://picsum.photos/200',
-      catalogCategoryId: 6,
-      catalogCategory: 'Ropa',
-      units: 3,
+      shortDesc: 'Una chaqueta de cuero marrón de estilo vintage',
+      longDesc: '',
+      priceValue: 149.99,
+      priceCurrency: 'USD',
+      smallImageUrl: 'https://picsum.photos/200',
+      largeImageUrl: 'https://picsum.photos/200',
+      categories: [{ id: 6, name: 'Ropa', shortDesc: '', longDesc: ''}],
+      slob: 'Ropa',
+      visible: true,
     },
     {
       id: 13,
       name: 'Sombrero de lana gris',
-      description: 'Un sombrero de lana gris de estilo clásico',
-      price: 29.99,
-      pictureUri: 'https://picsum.photos/200',
-      catalogCategoryId: 1,
-      catalogCategory: 'Accesorios',
-      units: 8,
+      shortDesc: 'Un sombrero de lana gris de estilo clásico',
+      longDesc: '',
+      priceValue: 29.99,
+      priceCurrency: 'USD',
+      smallImageUrl: 'https://picsum.photos/200',
+      largeImageUrl: 'https://picsum.photos/200',
+      categories: [{ id: 1, name: 'Accesorios', shortDesc: '', longDesc: ''}],
+      slob: 'Accesorios',
+      visible: true,
     },
     {
       id: 14,
       name: 'Vestido de flores',
-      description: 'Un vestido de flores con diseño elegante',
-      price: 89.99,
-      pictureUri: 'https://picsum.photos/200',
-      catalogCategoryId: 6,
-      catalogCategory: 'Ropa',
-      units: 12,
+      shortDesc: 'Un vestido de flores con diseño elegante',
+      longDesc: '',
+      priceValue: 89.99,
+      priceCurrency: 'USD',
+      smallImageUrl: 'https://picsum.photos/200',
+      largeImageUrl: 'https://picsum.photos/200',
+      categories: [{ id: 6, name: 'Ropa', shortDesc: '', longDesc: ''}],
+      slob: 'Ropa',
+      visible: true,
     },
     {
       id: 15,
       name: 'Bolso de cuero negro',
-      description: 'Un bolso de cuero negro con diseño clásico',
-      price: 69.99,
-      pictureUri: 'https://picsum.photos/200',
-      catalogCategoryId: 1,
-      catalogCategory: 'Accesorios',
-      units: 6,
+      shortDesc: 'Un bolso de cuero negro con diseño clásico',
+      longDesc: '',
+      priceValue: 69.99,
+      priceCurrency: 'USD',
+      smallImageUrl: 'https://picsum.photos/200',
+      largeImageUrl: 'https://picsum.photos/200',
+      categories: [{ id: 1, name: 'Accesorios', shortDesc: '', longDesc: ''}],
+      slob: 'Accesorios',
+      visible: true,
     },
   ],
 };

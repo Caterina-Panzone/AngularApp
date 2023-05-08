@@ -1,4 +1,6 @@
 export interface ICatalogCategory {
   id: number;
-  category: string;
+  name: string;
+  shortDesc: string;
+  longDesc: string;
 }
