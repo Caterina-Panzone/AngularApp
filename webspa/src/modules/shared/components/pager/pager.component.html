@@ -1,33 +1,33 @@
 <div class="container mt-3">
-  <nav>
-    <ul class="pagination justify-content-center">
+  <nav *ngIf="model">
+    <ul class="pagination justify-content-between">
       <li class="page-item">
-        <a
-          class="page-link"
-          href="#"
-          id="Previous"
-          [ngClass]="{ disabled: buttonStates?.previousDisabled }"
-          (click)="onPreviousClicked($event)"
-          aria-label="Previous"
-        >
+        <a class="page-link" href="#" id="Previous" [ngClass]="{ disabled: buttonStates?.previousDisabled }"
+          (click)="onPreviousClicked($event)" aria-label="Previous">
           <span aria-hidden="true">Anterior</span>
         </a>
       </li>
-      <li class="page-item" aria-current="page">
-        <a class="page-link noHover"
-          >Mostrando {{ model?.items }} de {{ model?.totalItems }} productos -
-          Página {{ model?.actualPage }} de {{ model?.totalPages }}</a
-        >
+      <li class="page-item m-auto" aria-current="page">
+        Mostrando {{ model?.items }} de {{ model?.totalItems }} productos -
+        Página {{ model?.actualPage }} de {{ model?.totalPages }}
       </li>
       <li class="page-item">
-        <a
-          class="page-link"
-          href="#"
-          id="Next"
-          [ngClass]="{ disabled: buttonStates?.nextDisabled }"
-          (click)="onNextClicked($event)"
-          aria-label="Next"
-        >
+        <a class="page-link" href="#" id="Next" [ngClass]="{ disabled: buttonStates?.nextDisabled }"
+          (click)="onNextClicked($event)" aria-label="Next">
+          <span aria-hidden="true">Siguiente</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <nav *ngIf="!model">
+    <ul class="pagination justify-content-between">
+      <li class="page-item placeholder-glow">
+        <a class="page-link placeholder disabled" id="Previous" aria-label="Previous">
+          <span aria-hidden="true">Anterior</span>
+        </a>
+      </li>
+      <li class="page-item placeholder-glow">
+        <a class="page-link placeholder disabled" id="Next" aria-label="Next">
           <span aria-hidden="true">Siguiente</span>
         </a>
       </li>

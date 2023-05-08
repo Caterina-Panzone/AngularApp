@@ -61,11 +61,13 @@ export class CatalogComponent implements OnInit {
   }
 
   private getCategories(): void {
-    this.service.getCategories().subscribe((categories) => {
-      this.categories = categories;
-      let allCategories: ICatalogCategory = { id: 0, name: 'Todas', shortDesc: '', longDesc: '' };
-      this.categories.unshift(allCategories);
-    });
+    this.service.getCategories()
+      .pipe(catchError((err) => this.handleError(err)))
+      .subscribe((categories) => {
+        this.categories = categories;
+        let allCategories: ICatalogCategory = { id: 0, name: 'Todas', shortDesc: '', longDesc: '' };
+        this.categories.unshift(allCategories);
+      });
   }
 
   private handleError(error: any) {
@@ -82,5 +84,9 @@ export class CatalogComponent implements OnInit {
     if (this.authenticated) {
       this.basketService.addItemToBasket(item);
     }
+  }
+
+  arrayOfSize(size: number): number[] {
+    return Array(size).fill(0);
   }
 }

@@ -2,11 +2,7 @@
   <div class="row row-cols-1 row-cols-md-4 row-cols-lg-5 g-4 card-group" *ngIf="catalog">
     <div *ngFor="let item of catalog.data" class="col">
       <div class="card h-100">
-        <img
-          src="{{ item.smallImageUrl }}"
-          class="card-img-top"
-          alt="product image"
-        />
+        <img src="{{ item.smallImageUrl }}" class="card-img-top" alt="product image" />
         <div class="card-body">
           <h5 class="card-title">{{ item.name }}</h5>
           <p class="card-text">
@@ -15,26 +11,43 @@
           <div>
             <small *ngFor="let category of item.categories" class="text-body-secondary">{{
               category.name
-            }}</small>
+              }}</small>
           </div>
           <div>{{ item.priceValue | currency }}</div>
         </div>
         <div class="card-footer align-items-end">
-          <button
-            type="button"
-            class="btn btn-light"
-            style="float: right"
-            [ngClass]="{ disabled: !authenticated }"
-            (click)="addToCart(item)"
-          >
+          <button type="button" class="btn btn-light" [ngClass]="{ disabled: !authenticated }"
+            (click)="addToCart(item)">
             <i class="bi bi-cart-plus"></i>
           </button>
         </div>
       </div>
     </div>
   </div>
-  <app-pager
-    [model]="paginationInfo"
-    (changed)="onPageChanged($event)"
-  ></app-pager>
+  <div class="row row-cols-1 row-cols-md-4 row-cols-lg-5 g-4 card-group" *ngIf="!catalog">
+    <div class="col" *ngFor="let i of arrayOfSize(10);">
+      <div class="card" aria-hidden="true">
+        <div class="card-img-top placeholder-glow" alt="Loading image...">
+          <span class="placeholder col-12"></span>
+        </div>
+        <div class="card-body" style="height:200px">
+          <h5 class="card-title placeholder-glow">
+            <span class="placeholder col-8"></span>
+          </h5>
+          <p class="card-text placeholder-glow">
+            <span class="placeholder col-11"></span>
+            <span class="placeholder col-10"></span>
+            <span class="placeholder col-8"></span>
+            <span class="placeholder col-6"></span>
+          </p>
+        </div>
+        <div class="card-footer align-items-end">
+          <button type="button" class="btn btn-light disabled">
+            <i class="bi bi-cart-plus"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-pager [model]="paginationInfo" (changed)="onPageChanged($event)"></app-pager>
 </div>
