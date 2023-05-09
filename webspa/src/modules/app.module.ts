@@ -8,6 +8,7 @@ import { CatalogModule } from './catalog/catalog.module';
 import { BasketModule } from './basket/basket.module';
 import { HeaderComponent } from './app-components/header/header.component';
 import { FooterComponent } from './app-components/footer/footer.component';
+import { OrdersModule } from './orders/orders.module';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, FooterComponent],
@@ -17,8 +18,9 @@ import { FooterComponent } from './app-components/footer/footer.component';
     SharedModule,
     CatalogModule,
     BasketModule,
+    OrdersModule
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
