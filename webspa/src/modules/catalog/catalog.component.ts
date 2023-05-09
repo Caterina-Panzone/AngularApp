@@ -8,6 +8,7 @@ import { ICatalogItem } from '../shared/models/catalogItem.model';
 import { BasketWrapperService } from '../shared/services/basket.wrapper.service';
 import { SecurityService } from '../shared/services/security.service';
 import { IBasket } from '../shared/models/basket.model';
+import { CatalogFieldEnum, ICatalogSortField, OrderEnum } from '../shared/models/catalogSortField.model';
 
 @Component({
   selector: 'app-catalog',
@@ -22,6 +23,9 @@ export class CatalogComponent implements OnInit {
   errorReceived: boolean = false;
   authenticated: boolean = false;
   currentBasket!: IBasket;
+  catalogSortField?: ICatalogSortField;
+  catalogFieldEnum = CatalogFieldEnum;
+  orderEnum = OrderEnum;
 
   constructor(
     private service: CatalogService,
@@ -42,11 +46,12 @@ export class CatalogComponent implements OnInit {
 
   private getCatalog(
     pageSize: number,
-    pageIndex: number
+    pageIndex: number,
+    catalogSortField?: ICatalogSortField
   ): void {
     this.errorReceived = false;
     this.service
-      .getCatalog(pageIndex, pageSize)
+      .getCatalog(pageIndex, pageSize, catalogSortField)
       .pipe(catchError((err) => this.handleError(err)))
       .subscribe((catalog) => {
         this.catalog = catalog;
@@ -77,7 +82,12 @@ export class CatalogComponent implements OnInit {
 
   onPageChanged(value: any) {
     this.paginationInfo.actualPage = value;
-    this.getCatalog(this.paginationInfo.itemsPage, value);
+    this.getCatalog(this.paginationInfo.itemsPage, value, this.catalogSortField);
+  }
+
+  orderBy(field: CatalogFieldEnum, order: OrderEnum) {
+    this.catalogSortField = { name: field, order: order };
+    this.getCatalog(this.paginationInfo.itemsPage, this.paginationInfo.actualPage, this.catalogSortField);
   }
 
   addToCart(item: ICatalogItem) {

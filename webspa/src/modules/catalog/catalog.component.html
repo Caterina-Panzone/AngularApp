@@ -1,4 +1,33 @@
 <div class="container mt-4">
+  <div class="row">
+    <div class="col mb-1">
+      <div class="dropdown float-end">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Ordenar
+        </button>
+        <ul class="dropdown-menu">
+          <li><button class="dropdown-item" (click)="orderBy(catalogFieldEnum.NAME, orderEnum.ASC)" type="button"
+              [ngClass]="catalogSortField?.name === catalogFieldEnum.NAME && catalogSortField?.order === orderEnum.ASC ? 'active' : ''">Nombre
+              A-Z</button></li>
+          <li><button class="dropdown-item" (click)="orderBy(catalogFieldEnum.NAME, orderEnum.DESC)" type="button"
+              [ngClass]="catalogSortField?.name === catalogFieldEnum.NAME && catalogSortField?.order === orderEnum.DESC ? 'active' : ''">Nombre
+              Z-A</button></li>
+          <li><button class="dropdown-item" (click)="orderBy(catalogFieldEnum.PRICE, orderEnum.ASC)" type="button"
+              [ngClass]="catalogSortField?.name === catalogFieldEnum.PRICE && catalogSortField?.order === orderEnum.ASC ? 'active' : ''">Precio
+              Menor-Mayor</button></li>
+          <li><button class="dropdown-item" (click)="orderBy(catalogFieldEnum.PRICE, orderEnum.DESC)" type="button"
+              [ngClass]="catalogSortField?.name === catalogFieldEnum.PRICE && catalogSortField?.order === orderEnum.DESC ? 'active' : ''">Precio
+              Mayor-Menor</button></li>
+          <li><button class="dropdown-item" (click)="orderBy(catalogFieldEnum.CURRENCY, orderEnum.ASC)" type="button"
+              [ngClass]="catalogSortField?.name === catalogFieldEnum.CURRENCY && catalogSortField?.order === orderEnum.ASC ? 'active' : ''">Moneda
+              A-Z</button></li>
+          <li><button class="dropdown-item" (click)="orderBy(catalogFieldEnum.CURRENCY, orderEnum.DESC)" type="button"
+              [ngClass]="catalogSortField?.name === catalogFieldEnum.CURRENCY && catalogSortField?.order === orderEnum.DESC ? 'active' : ''">Moneda
+              Z-A</button></li>
+        </ul>
+      </div>
+    </div>
+  </div>
   <div class="row row-cols-1 row-cols-md-4 row-cols-lg-5 g-4 card-group" *ngIf="catalog">
     <div *ngFor="let item of catalog.data" class="col">
       <div class="card h-100">
@@ -13,7 +42,7 @@
               category.name
               }}</small>
           </div>
-          <div>{{ item.priceValue | currency }}</div>
+          <div>{{ item.priceValue | currency: item.priceCurrency }}</div>
         </div>
         <div class="card-footer align-items-end">
           <button type="button" class="btn btn-light" [ngClass]="{ disabled: !authenticated }"

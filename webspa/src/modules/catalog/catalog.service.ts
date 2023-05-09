@@ -3,6 +3,7 @@ import { ICatalog } from '../shared/models/catalog.model';
 import { Observable, map } from 'rxjs';
 import { ICatalogCategory } from '../shared/models/catalogCategory.model';
 import { HttpService } from '../shared/services/http.service';
+import { ICatalogSortField } from '../shared/models/catalogSortField.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,27 +17,33 @@ export class CatalogService {
 
   getCatalog(
     pageIndex: number,
-    pageSize: number
+    pageSize: number,
+    catalogSortField?: ICatalogSortField
   ): Observable<ICatalog> {
-    const query = "query GetCatalog($limit: Int, $offset: Int) {catalog(limit: $limit, offset: $offset) {count products {id name shortDesc longDesc priceCurrency priceValue visible smallImageUrl largeImageUrl slob categories {id name}}}}";
+    const query = `query GetCatalog($limit: Int, $offset: Int${catalogSortField ? ", $sort: SortInput" : ""}) {
+      catalog(limit: $limit, offset: $offset${catalogSortField ? ", sort: $sort" : ""}) { 
+        count products { id name shortDesc longDesc priceCurrency priceValue visible smallImageUrl largeImageUrl slob categories { id name }}
+      }
+    }`;
     let variables = {
       limit: pageSize,
-      offset: (pageIndex-1) * pageSize
+      offset: (pageIndex - 1) * pageSize,
+      sort: catalogSortField
     }
-    return this.service.post(this.catalogUrl, {'query': query, 'variables': variables }).pipe<ICatalog>(
-        map((response: any) => {
-          return {
-            pageIndex: pageIndex,
-            pageSize: pageSize,
-            count: response.data.catalog.count,
-            data: response.data.catalog.products
-          };
-        }));
+    return this.service.post(this.catalogUrl, { 'query': query, 'variables': variables }).pipe<ICatalog>(
+      map((response: any) => {
+        return {
+          pageIndex: pageIndex,
+          pageSize: pageSize,
+          count: response.data.catalog.count,
+          data: response.data.catalog.products
+        };
+      }));
   }
 
   getCategories(): Observable<ICatalogCategory[]> {
     const query = "query { categories { id name shortDesc longDesc }}";
-    return this.service.post(this.catalogUrl, {'query': query}).pipe<ICatalogCategory[]>(
+    return this.service.post(this.catalogUrl, { 'query': query }).pipe<ICatalogCategory[]>(
       map((response: any) => {
         return response.data.categories;
       }));
@@ -44,12 +51,12 @@ export class CatalogService {
 }
 
 const mockCategories: ICatalogCategory[] = [
-  { id: 1, name: 'Accesorios', shortDesc: '', longDesc: ''},
-  { id: 2, name: 'Electrónica', shortDesc: '', longDesc: ''},
-  { id: 3, name: 'Libros', shortDesc: '', longDesc: ''},
-  { id: 4, name: 'Juegos', shortDesc: '', longDesc: ''},
-  { id: 5, name: 'Jardín', shortDesc: '', longDesc: ''},
-  { id: 6, name: 'Ropa', shortDesc: '', longDesc: ''},
+  { id: 1, name: 'Accesorios', shortDesc: '', longDesc: '' },
+  { id: 2, name: 'Electrónica', shortDesc: '', longDesc: '' },
+  { id: 3, name: 'Libros', shortDesc: '', longDesc: '' },
+  { id: 4, name: 'Juegos', shortDesc: '', longDesc: '' },
+  { id: 5, name: 'Jardín', shortDesc: '', longDesc: '' },
+  { id: 6, name: 'Ropa', shortDesc: '', longDesc: '' },
 ];
 
 const mockCatalog: ICatalog = {
@@ -67,7 +74,7 @@ const mockCatalog: ICatalog = {
       priceCurrency: 'USD',
       smallImageUrl: 'https://picsum.photos/200',
       largeImageUrl: 'https://picsum.photos/200',
-      categories: [{ id: 5, name: 'Jardín', shortDesc: '', longDesc: ''}],
+      categories: [{ id: 5, name: 'Jardín', shortDesc: '', longDesc: '' }],
       slob: 'Jardín',
       visible: true,
     },
@@ -80,7 +87,7 @@ const mockCatalog: ICatalog = {
       priceCurrency: 'USD',
       smallImageUrl: 'https://picsum.photos/200',
       largeImageUrl: 'https://picsum.photos/200',
-      categories: [{ id: 2, name: 'Electrónica', shortDesc: '', longDesc: ''}],
+      categories: [{ id: 2, name: 'Electrónica', shortDesc: '', longDesc: '' }],
       slob: 'Electrónica',
       visible: true,
     },
@@ -93,7 +100,7 @@ const mockCatalog: ICatalog = {
       priceCurrency: 'USD',
       smallImageUrl: 'https://picsum.photos/200',
       largeImageUrl: 'https://picsum.photos/200',
-      categories: [{ id: 3, name: 'Libros', shortDesc: '', longDesc: ''}],
+      categories: [{ id: 3, name: 'Libros', shortDesc: '', longDesc: '' }],
       slob: 'Libros',
       visible: true,
     },
@@ -102,12 +109,12 @@ const mockCatalog: ICatalog = {
       name: 'Mochila para portátil',
       shortDesc:
         'Mochila con compartimento para portátil de hasta 15 pulgadas',
-        longDesc: '',
+      longDesc: '',
       priceValue: 50,
       priceCurrency: 'USD',
       smallImageUrl: 'https://picsum.photos/200',
       largeImageUrl: 'https://picsum.photos/200',
-      categories: [{ id: 1, name: 'Accesorios', shortDesc: '', longDesc: ''}],
+      categories: [{ id: 1, name: 'Accesorios', shortDesc: '', longDesc: '' }],
       slob: 'Accesorios',
       visible: true,
     },
@@ -120,7 +127,7 @@ const mockCatalog: ICatalog = {
       priceCurrency: 'USD',
       smallImageUrl: 'https://picsum.photos/200',
       largeImageUrl: 'https://picsum.photos/200',
-      categories: [{ id: 1, name: 'Accesorios', shortDesc: '', longDesc: ''}],
+      categories: [{ id: 1, name: 'Accesorios', shortDesc: '', longDesc: '' }],
       slob: 'Accesorios',
       visible: true,
     },
@@ -133,7 +140,7 @@ const mockCatalog: ICatalog = {
       priceCurrency: 'USD',
       smallImageUrl: 'https://picsum.photos/200',
       largeImageUrl: 'https://picsum.photos/200',
-      categories: [{ id: 4, name: 'Juegos', shortDesc: '', longDesc: ''}],
+      categories: [{ id: 4, name: 'Juegos', shortDesc: '', longDesc: '' }],
       slob: 'Juegos',
       visible: true,
     },
@@ -146,7 +153,7 @@ const mockCatalog: ICatalog = {
       priceCurrency: 'USD',
       smallImageUrl: 'https://picsum.photos/200',
       largeImageUrl: 'https://picsum.photos/200',
-      categories: [{ id: 6, name: 'Ropa', shortDesc: '', longDesc: ''}],
+      categories: [{ id: 6, name: 'Ropa', shortDesc: '', longDesc: '' }],
       slob: 'Ropa',
       visible: true,
     },
@@ -155,12 +162,12 @@ const mockCatalog: ICatalog = {
       name: 'Laptop HP',
       shortDesc:
         'Laptop con procesador Intel Core i7 y pantalla de 15 pulgadas',
-        longDesc: '',
+      longDesc: '',
       priceValue: 1200.0,
       priceCurrency: 'USD',
       smallImageUrl: 'https://picsum.photos/200',
       largeImageUrl: 'https://picsum.photos/200',
-      categories: [{ id: 2, name: 'Electrónica', shortDesc: '', longDesc: ''}],
+      categories: [{ id: 2, name: 'Electrónica', shortDesc: '', longDesc: '' }],
       slob: 'Electrónica',
       visible: true,
     },
@@ -173,7 +180,7 @@ const mockCatalog: ICatalog = {
       priceCurrency: 'USD',
       smallImageUrl: 'https://picsum.photos/200',
       largeImageUrl: 'https://picsum.photos/200',
-      categories: [{ id: 6, name: 'Ropa', shortDesc: '', longDesc: ''}],
+      categories: [{ id: 6, name: 'Ropa', shortDesc: '', longDesc: '' }],
       slob: 'Ropa',
       visible: true,
     },
@@ -186,7 +193,7 @@ const mockCatalog: ICatalog = {
       priceCurrency: 'USD',
       smallImageUrl: 'https://picsum.photos/200',
       largeImageUrl: 'https://picsum.photos/200',
-      categories: [{ id: 6, name: 'Ropa', shortDesc: '', longDesc: ''}],
+      categories: [{ id: 6, name: 'Ropa', shortDesc: '', longDesc: '' }],
       slob: 'Ropa',
       visible: true,
     },
@@ -199,7 +206,7 @@ const mockCatalog: ICatalog = {
       priceCurrency: 'USD',
       smallImageUrl: 'https://picsum.photos/200',
       largeImageUrl: 'https://picsum.photos/200',
-      categories: [{ id: 6, name: 'Ropa', shortDesc: '', longDesc: ''}],
+      categories: [{ id: 6, name: 'Ropa', shortDesc: '', longDesc: '' }],
       slob: 'Ropa',
       visible: true,
     },
@@ -212,7 +219,7 @@ const mockCatalog: ICatalog = {
       priceCurrency: 'USD',
       smallImageUrl: 'https://picsum.photos/200',
       largeImageUrl: 'https://picsum.photos/200',
-      categories: [{ id: 6, name: 'Ropa', shortDesc: '', longDesc: ''}],
+      categories: [{ id: 6, name: 'Ropa', shortDesc: '', longDesc: '' }],
       slob: 'Ropa',
       visible: true,
     },
@@ -225,7 +232,7 @@ const mockCatalog: ICatalog = {
       priceCurrency: 'USD',
       smallImageUrl: 'https://picsum.photos/200',
       largeImageUrl: 'https://picsum.photos/200',
-      categories: [{ id: 1, name: 'Accesorios', shortDesc: '', longDesc: ''}],
+      categories: [{ id: 1, name: 'Accesorios', shortDesc: '', longDesc: '' }],
       slob: 'Accesorios',
       visible: true,
     },
@@ -238,7 +245,7 @@ const mockCatalog: ICatalog = {
       priceCurrency: 'USD',
       smallImageUrl: 'https://picsum.photos/200',
       largeImageUrl: 'https://picsum.photos/200',
-      categories: [{ id: 6, name: 'Ropa', shortDesc: '', longDesc: ''}],
+      categories: [{ id: 6, name: 'Ropa', shortDesc: '', longDesc: '' }],
       slob: 'Ropa',
       visible: true,
     },
@@ -251,7 +258,7 @@ const mockCatalog: ICatalog = {
       priceCurrency: 'USD',
       smallImageUrl: 'https://picsum.photos/200',
       largeImageUrl: 'https://picsum.photos/200',
-      categories: [{ id: 1, name: 'Accesorios', shortDesc: '', longDesc: ''}],
+      categories: [{ id: 1, name: 'Accesorios', shortDesc: '', longDesc: '' }],
       slob: 'Accesorios',
       visible: true,
     },
