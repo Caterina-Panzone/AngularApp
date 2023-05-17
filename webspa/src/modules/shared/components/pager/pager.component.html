@@ -8,8 +8,8 @@
         </a>
       </li>
       <li class="page-item m-auto" aria-current="page">
-        Mostrando {{ model?.items }} de {{ model?.totalItems }} productos -
-        Página {{ model?.actualPage }} de {{ model?.totalPages }}
+        Mostrando {{ model.items }} de {{ model.totalItems }} productos -
+        Página {{ model.actualPage }} de {{ model.totalPages }}
       </li>
       <li class="page-item">
         <a class="page-link" href="#" id="Next" [ngClass]="{ disabled: buttonStates?.nextDisabled }"

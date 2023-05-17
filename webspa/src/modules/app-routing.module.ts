@@ -6,7 +6,7 @@ import { NewOrderComponent } from './orders/new-order/new-order.component';
 import { OrdersComponent } from './orders/orders.component';
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
 
-export const routes: Routes = [
+const routes: Routes = [
   { path: '', redirectTo: 'catalog', pathMatch: 'full' },
   { path: 'catalog', component: CatalogComponent },
   { path: 'basket', component: BasketComponent },
