@@ -4,6 +4,8 @@ import { Observable, map } from 'rxjs';
 import { ICatalogCategory } from '../shared/models/catalogCategory.model';
 import { HttpService } from '../shared/services/http.service';
 import { ICatalogSortField } from '../shared/models/catalogSortField.model';
+import { ConfigurationService } from '../shared/services/configuration.service';
+import { IConfiguration } from '../shared/models/configuration.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +13,13 @@ import { ICatalogSortField } from '../shared/models/catalogSortField.model';
 export class CatalogService {
   private catalogUrl: string = '';
 
-  constructor(private service: HttpService) {
-    this.catalogUrl = 'http://localhost:3000/catalog';
+  constructor(private service: HttpService, private configurationService: ConfigurationService) {
+    if (this.configurationService.serverSettings) {
+      this.catalogUrl = this.configurationService.serverSettings.catalogUrl;
+    }
+    else {
+      this.configurationService.settingsLoaded$.subscribe((config: IConfiguration) => { this.catalogUrl = config.catalogUrl; });
+    }
   }
 
   getCatalog(
