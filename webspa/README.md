@@ -21,30 +21,34 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Being at /webspa/:
 
-1. Install service deps
+1. Set up local environment and workspace:
+
+    Follow the instructions from Angular guide: `https://angular.io/guide/setup-local`
+
+2. Install service deps
 
     `npm install`
 
-2. Build the image:
+3. Build the image (Steps 1 & 2 should not be needed if running the code with Docker):
 
     `docker build -t <DockerUserId>/<ImageName>:<version> .`
 
   There's no need to use the docker user at this point, just tag (-t) the image as you'd like. When trying to have the application up and running through kubernetes, the above nomenclature is needed.
 
-3. Run recently created docker image:
+4. Run recently created docker image:
 
     `docker run -p 4200:80 -d <DockerUserId>/<ImageName>`
 
     Same as above, make sure to  use the tag name in step 2.
 
-4. Stop a running container:
+5. Stop a running container:
 
     `docker stop <ContainerId>`
     
     In order to retrieve the id, use the following command to list all the running containers:
     `docker ps`
 
-5. Access application:
+6. Access application:
 
     With a browser navigate to http://localhost:4200/
 
